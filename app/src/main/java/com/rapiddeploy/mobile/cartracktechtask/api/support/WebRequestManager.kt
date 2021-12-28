@@ -11,7 +11,7 @@ import javax.inject.Inject
 
 class WebRequestManager @Inject constructor() {
 
-    val omdbResponse = MutableLiveData<OmdbResponse>()
+    val omdbResponse = MutableLiveData<OmdbResponse?>()
 
     fun getTitles(searchTitle: String, type: Title.Type) {
         val call = ApiService.apiInterface.getTitles(searchTitle, type.value)
