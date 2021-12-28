@@ -1,7 +1,7 @@
 package com.rapiddeploy.mobile.cartracktechtask.ui.search
 
+import android.app.AlertDialog
 import android.os.Bundle
-import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -30,13 +30,27 @@ class SearchFragment : Fragment() {
         }
 
         searchViewModel.titles.observe(this, { titles ->
+            var titleString: String? = null
             if (titles != null) {
                 for (title in titles) {
-                    Log.d("title: ", title.title!!)
+                    titleString += title.title!! + "\n"
                 }
+            }
+            if (titleString != null) {
+                showAlert(titleString)
             }
         })
 
         return binding.root
+    }
+
+    private fun showAlert(titles: String) {
+        AlertDialog.Builder(requireActivity()).setTitle("Titles")
+            .setMessage(titles)
+            .setPositiveButton("Okay") { _, _ ->
+
+            }
+            .setCancelable(true)
+            .show()
     }
 }

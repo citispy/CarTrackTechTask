@@ -1,5 +1,6 @@
 package com.rapiddeploy.mobile.cartracktechtask.api.support
 
+import com.rapiddeploy.mobile.cartracktechtask.ui.search.OmdbResponseCache
 import com.rapiddeploy.mobile.cartracktechtask.ui.search.Repository
 import com.rapiddeploy.mobile.cartracktechtask.ui.search.TitlesRepository
 import dagger.Module
@@ -14,5 +15,6 @@ object ApiModule {
 
     @Singleton
     @Provides
-    fun providesRepository(webRequestManager: WebRequestManager) = Repository(webRequestManager) as TitlesRepository
+    fun providesRepository(webRequestManager: WebRequestManager, omdbResponseCache: OmdbResponseCache) =
+        Repository(webRequestManager, omdbResponseCache) as TitlesRepository
 }

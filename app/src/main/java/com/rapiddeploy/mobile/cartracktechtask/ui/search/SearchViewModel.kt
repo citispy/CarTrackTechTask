@@ -13,8 +13,4 @@ class SearchViewModel @Inject constructor(private val repository: TitlesReposito
     fun getTitles() {
         repository.getTitles("good", Title.Type.MOVIE)
     }
-
-    init {
-
-    }
 }
