@@ -15,6 +15,6 @@ class SearchViewModel @Inject constructor(private val repository: TitlesReposito
     }
 
     init {
-        getTitles()
+
     }
 }

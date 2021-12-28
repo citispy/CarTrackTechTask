@@ -28,6 +28,11 @@ android {
         sourceCompatibility JavaVersion.VERSION_1_8
         targetCompatibility JavaVersion.VERSION_1_8
     }
+
+    buildFeatures {
+        dataBinding true
+    }
+
     kotlinOptions {
         jvmTarget = '1.8'
     }
@@ -48,6 +53,7 @@ dependencies {
     implementation 'androidx.navigation:navigation-ui-ktx:2.3.5'
     implementation 'androidx.fragment:fragment-ktx:1.4.0'
     implementation 'androidx.activity:activity-ktx:1.4.0'
+    implementation 'androidx.legacy:legacy-support-v4:1.0.0'
     kapt("com.google.dagger:hilt-android-compiler:2.38.1")
     testImplementation 'junit:junit:4.+'
     androidTestImplementation 'androidx.test.ext:junit:1.1.3'
