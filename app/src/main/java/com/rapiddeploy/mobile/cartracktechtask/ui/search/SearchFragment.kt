@@ -10,13 +10,14 @@ import androidx.databinding.DataBindingUtil
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.viewModels
 import com.rapiddeploy.mobile.cartracktechtask.R
+import com.rapiddeploy.mobile.cartracktechtask.api.model.Title
 import com.rapiddeploy.mobile.cartracktechtask.databinding.FragmentSearchBinding
 import dagger.hilt.android.AndroidEntryPoint
 
 @AndroidEntryPoint
 class SearchFragment : Fragment() {
 
-    private val searchViewModel: SearchViewModel by viewModels()
+    private val titlesViewModel: TitlesViewModel by viewModels()
     private lateinit var binding: FragmentSearchBinding
 
     override fun onCreateView(
@@ -27,10 +28,10 @@ class SearchFragment : Fragment() {
         binding = DataBindingUtil.inflate(inflater, R.layout.fragment_search, container, false)
 
         binding.button.setOnClickListener {
-            searchViewModel.getTitles()
+            titlesViewModel.getTitles("good", Title.Type.MOVIE)
         }
 
-        searchViewModel.titles.observe(this, { titles ->
+        titlesViewModel.titles.observe(this, { titles ->
             var titleString: String? = null
             if (titles != null) {
                 for (title in titles) {
