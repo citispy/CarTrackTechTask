@@ -2,6 +2,7 @@ package com.rapiddeploy.mobile.cartracktechtask.ui.search
 
 import android.app.AlertDialog
 import android.os.Bundle
+import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -9,15 +10,19 @@ import android.widget.Toast
 import androidx.databinding.DataBindingUtil
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.viewModels
+import androidx.recyclerview.widget.GridLayoutManager
+import androidx.recyclerview.widget.LinearLayoutManager
+import androidx.recyclerview.widget.RecyclerView
 import com.rapiddeploy.mobile.cartracktechtask.R
 import com.rapiddeploy.mobile.cartracktechtask.api.model.Title
 import com.rapiddeploy.mobile.cartracktechtask.databinding.FragmentSearchBinding
 import dagger.hilt.android.AndroidEntryPoint
 
 @AndroidEntryPoint
-class SearchFragment : Fragment() {
+class SearchFragment : Fragment(), TitleResultsAdapter.OnItemClickListener {
 
     private val titlesViewModel: TitlesViewModel by viewModels()
+    private val adapter = TitleResultsAdapter(this)
     private lateinit var binding: FragmentSearchBinding
 
     override fun onCreateView(
@@ -27,25 +32,25 @@ class SearchFragment : Fragment() {
 
         binding = DataBindingUtil.inflate(inflater, R.layout.fragment_search, container, false)
 
-        binding.button.setOnClickListener {
-            titlesViewModel.getTitles("good", Title.Type.MOVIE)
-        }
-
-        titlesViewModel.titles.observe(this, { titles ->
-            var titleString: String? = null
-            if (titles != null) {
-                for (title in titles) {
-                    titleString += title.title!! + "\n"
-                }
-            }
-            if (titleString != null) {
-                showAlert(titleString)
-            } else {
-                Toast.makeText(requireContext(), "Error", Toast.LENGTH_LONG).show()
-            }
-        })
+        initTitlesList()
+        observeViewModel()
 
         return binding.root
+    }
+
+    private fun initTitlesList() {
+        val titlesList: RecyclerView = binding.titlesList
+        titlesList.layoutManager = LinearLayoutManager(requireContext())
+        titlesList.adapter = adapter
+        titlesViewModel.getTitles("good", Title.Type.MOVIE)
+    }
+
+    private fun observeViewModel() {
+        titlesViewModel.titles.observe(this) {
+            if (it != null) {
+                adapter.updateTitles(it)
+            }
+        }
     }
 
     private fun showAlert(titles: String) {
@@ -56,5 +61,10 @@ class SearchFragment : Fragment() {
             }
             .setCancelable(true)
             .show()
+    }
+
+    override fun onItemClicked(title: Title) {
+        titlesViewModel.selectedTitle = title
+        Log.d(this.tag, "Selected title set to: ${title.title}")
     }
 }

@@ -10,6 +10,8 @@ class TitlesViewModel @Inject constructor(private val repository: TitlesReposito
 
     val titles = repository.titles
 
+    var selectedTitle: Title? = null
+
     fun getTitles(searchTitle: String, type: Title.Type) {
         repository.getTitles(searchTitle, type)
     }
