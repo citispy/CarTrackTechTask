@@ -10,5 +10,18 @@
         android:id="@+id/searchFragment"
         android:name="com.rapiddeploy.mobile.cartracktechtask.ui.search.SearchFragment"
         android:label="fragment_search"
-        tools:layout="@layout/fragment_search" />
+        tools:layout="@layout/fragment_search" >
+        <action
+            android:id="@+id/action_searchFragment_to_titleDetailsFragment"
+            app:destination="@id/titleDetailsFragment"
+            app:enterAnim="@anim/slide_in_right"
+            app:exitAnim="@anim/slide_out_left"
+            app:popEnterAnim="@anim/slide_in_left"
+            app:popExitAnim="@anim/slide_out_right"
+            app:popUpTo="@id/searchFragment"/>
+    </fragment>
+    <fragment
+        android:id="@+id/titleDetailsFragment"
+        android:name="com.rapiddeploy.mobile.cartracktechtask.ui.detail.TitleDetailsFragment"
+        android:label="TitleDetailsFragment" />
 </navigation>

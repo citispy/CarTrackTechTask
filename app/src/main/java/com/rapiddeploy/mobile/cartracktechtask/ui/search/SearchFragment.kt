@@ -1,24 +1,25 @@
 package com.rapiddeploy.mobile.cartracktechtask.ui.search
 
 import android.os.Bundle
-import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import androidx.databinding.DataBindingUtil
 import androidx.fragment.app.Fragment
-import androidx.fragment.app.viewModels
+import androidx.lifecycle.ViewModelProviders
+import androidx.navigation.fragment.findNavController
 import androidx.recyclerview.widget.GridLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.rapiddeploy.mobile.cartracktechtask.R
 import com.rapiddeploy.mobile.cartracktechtask.api.model.Title
 import com.rapiddeploy.mobile.cartracktechtask.databinding.FragmentSearchBinding
+import com.rapiddeploy.mobile.cartracktechtask.ui.viewmodel.TitlesViewModel
 import dagger.hilt.android.AndroidEntryPoint
 
 @AndroidEntryPoint
 class SearchFragment : Fragment(), TitleResultsAdapter.OnItemClickListener {
 
-    private val titlesViewModel: TitlesViewModel by viewModels()
+    private lateinit var titlesViewModel: TitlesViewModel
     private val adapter = TitleResultsAdapter(this)
     private lateinit var binding: FragmentSearchBinding
 
@@ -26,6 +27,8 @@ class SearchFragment : Fragment(), TitleResultsAdapter.OnItemClickListener {
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View {
+
+        titlesViewModel = ViewModelProviders.of(requireActivity()).get(TitlesViewModel::class.java)
 
         binding = DataBindingUtil.inflate(inflater, R.layout.fragment_search, container, false)
         binding.seachFab.setOnClickListener {
@@ -58,6 +61,6 @@ class SearchFragment : Fragment(), TitleResultsAdapter.OnItemClickListener {
 
     override fun onItemClicked(title: Title) {
         titlesViewModel.selectedTitle = title
-        Log.d(this.tag, "Selected title set to: ${title.title}")
+        findNavController().navigate(R.id.action_searchFragment_to_titleDetailsFragment)
     }
 }

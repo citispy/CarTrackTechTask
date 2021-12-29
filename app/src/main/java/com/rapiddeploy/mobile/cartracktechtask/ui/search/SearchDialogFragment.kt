@@ -5,14 +5,13 @@ import android.app.Dialog
 import android.content.DialogInterface
 import android.os.Bundle
 import android.view.LayoutInflater
-import android.view.View
-import android.view.ViewGroup
 import androidx.databinding.DataBindingUtil
 import androidx.fragment.app.DialogFragment
 import androidx.fragment.app.viewModels
 import com.rapiddeploy.mobile.cartracktechtask.R
 import com.rapiddeploy.mobile.cartracktechtask.api.model.Title
 import com.rapiddeploy.mobile.cartracktechtask.databinding.FragmentSearchDialogBinding
+import com.rapiddeploy.mobile.cartracktechtask.ui.viewmodel.TitlesViewModel
 import dagger.hilt.android.AndroidEntryPoint
 
 @AndroidEntryPoint

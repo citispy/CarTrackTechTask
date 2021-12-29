@@ -8,4 +8,6 @@
     <string name="series">Series</string>
     <string name="cancel">Cancel</string>
     <string name="no_movies_found_please_perform_a_search">No movies found. Please perform a search.</string>
+    <string name="type"> \u0020| %1$s</string>
+    <string name="imdb_rating"> \u0020 | IMDB: %1$s</string>
 </resources>
