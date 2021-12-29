@@ -1,3 +1,11 @@
 <resources>
     <string name="app_name">CarTrackTechTask</string>
+    <string name="enter_search_title">Enter Search Title</string>
+    <string name="search_for_title">Search for a Title</string>
+    <string name="search">Search</string>
+    <string name="error_enter_search_title">Please enter a search title</string>
+    <string name="movies">Movies</string>
+    <string name="series">Series</string>
+    <string name="cancel">Cancel</string>
+    <string name="no_movies_found_please_perform_a_search">No movies found. Please perform a search.</string>
 </resources>
