@@ -47,11 +47,9 @@ class TitleResultsAdapter(private val itemCLickListener: OnItemClickListener):
         }
     }
 
-    fun updateTitles(titles: List<Title>) {
-        this.titles = titles
-        for (i in titles.indices) {
-            notifyItemChanged(i)
-        }
+    fun updateTitles(newTitles: List<Title>) {
+        titles = newTitles
+        notifyDataSetChanged()
     }
 
     override fun getItemCount(): Int {
