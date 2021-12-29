@@ -11,14 +11,21 @@
         tools:background="@color/black">
 
         <TextView
-            android:id="@+id/no_movies_found"
+            android:id="@+id/no_titles_found"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_gravity="center"
             android:textSize="22sp"
-            android:text="@string/no_movies_found_please_perform_a_search"
+            android:text="@string/no_titles_found_please_perform_a_search"
             android:gravity="center"
-            android:textColor="@color/white"/>
+            android:textColor="@color/white"
+            android:visibility="visible"/>
+        <ProgressBar
+            android:id="@+id/progress"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center"
+            android:visibility="gone"/>
 
         <androidx.recyclerview.widget.RecyclerView
             android:id="@+id/titles_list"
