@@ -7,7 +7,7 @@ import com.rapiddeploy.mobile.cartracktechtask.utils.KEY_TITLE
 import com.rapiddeploy.mobile.cartracktechtask.utils.SharedPrefsUtils
 import javax.inject.Inject
 
-class OmdbResponseCache @Inject constructor(private val sharedPrefsUtils: SharedPrefsUtils){
+class OmdbResponseCache @Inject constructor(private val sharedPrefsUtils: SharedPrefsUtils) {
 
     var response = MutableLiveData<OmdbResponse>()
 
@@ -18,8 +18,8 @@ class OmdbResponseCache @Inject constructor(private val sharedPrefsUtils: Shared
     }
 
     private fun getCachedResponse() {
-        val gson = Gson()
         val titlesString = sharedPrefsUtils.getPrefs(KEY_TITLE)
+        val gson = Gson()
         val cachedResponse = gson.fromJson(titlesString, OmdbResponse::class.java)
         if (cachedResponse != null) {
             response.value = cachedResponse

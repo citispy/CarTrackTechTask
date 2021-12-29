@@ -10,7 +10,7 @@ import com.rapiddeploy.mobile.cartracktechtask.api.support.WebRequestManager
 class Repository(private val webRequestManager: WebRequestManager, private val omdbResponseCache: OmdbResponseCache) : TitlesRepository {
 
     override val apiResponse: MutableLiveData<OmdbResponse?> = webRequestManager.omdbResponse
-    private val cachedApiResponse: MutableLiveData<OmdbResponse> = omdbResponseCache.response
+    override val cachedApiResponse: MutableLiveData<OmdbResponse> = omdbResponseCache.response
     override val titles = MediatorLiveData<List<Title>>()
 
     override fun getTitles(searchTitle: String, type: Title.Type) {
