@@ -7,7 +7,6 @@ import android.view.ViewGroup
 import androidx.databinding.DataBindingUtil
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.activityViewModels
-import androidx.lifecycle.ViewModelProviders
 import androidx.navigation.fragment.findNavController
 import androidx.recyclerview.widget.GridLayoutManager
 import androidx.recyclerview.widget.RecyclerView
@@ -15,6 +14,8 @@ import com.rapiddeploy.mobile.cartracktechtask.R
 import com.rapiddeploy.mobile.cartracktechtask.api.model.Title
 import com.rapiddeploy.mobile.cartracktechtask.databinding.FragmentSearchBinding
 import com.rapiddeploy.mobile.cartracktechtask.ui.viewmodel.TitlesViewModel
+import com.rapiddeploy.mobile.cartracktechtask.ui.viewmodel.TitlesViewModel.*
+import com.rapiddeploy.mobile.cartracktechtask.ui.viewmodel.TitlesViewModel.UiState.*
 import dagger.hilt.android.AndroidEntryPoint
 
 @AndroidEntryPoint
@@ -47,15 +48,41 @@ class SearchFragment : Fragment(), TitleResultsAdapter.OnItemClickListener {
     }
 
     private fun observeViewModel() {
-        titlesViewModel.titles.observe(this) {
-            val moviesFound = it != null
-            if (moviesFound) {
-                adapter.updateTitles(it!!)
-            }
-
-            binding.titlesList.visibility = if (moviesFound) View.VISIBLE else View.GONE
-            binding.noMoviesFound.visibility = if (moviesFound) View.GONE else View.VISIBLE
+        titlesViewModel.uiState.observe(this) {
+            updateVisibility(it)
         }
+
+        titlesViewModel.titles.observe(this) {
+            updateTitles(it)
+        }
+    }
+
+    private fun updateVisibility(it: UiState) {
+        setProgressVisibility(it)
+        setTitlesListVisibility(it)
+        setNoTitlesListVisibility(it)
+    }
+
+    private fun updateTitles(it: List<Title>?) {
+        val moviesFound = it != null
+        if (moviesFound) {
+            adapter.updateTitles(it!!)
+        }
+    }
+
+    private fun setProgressVisibility(state: UiState) {
+        binding.progress.visibility =
+            if (state == LOADING) View.VISIBLE else View.GONE
+    }
+
+    private fun setTitlesListVisibility(state: UiState) {
+        binding.titlesList.visibility =
+            if (state == NOT_LOADING_WITH_TITLES) View.VISIBLE else View.GONE
+    }
+
+    private fun setNoTitlesListVisibility(state: UiState) {
+        binding.noTitlesFound.visibility =
+            if (state == NOT_LOADING_WITHOUT_TITLES) View.VISIBLE else View.GONE
     }
 
     override fun onItemClicked(title: Title) {
