@@ -6,6 +6,7 @@ import android.view.View
 import android.view.ViewGroup
 import androidx.databinding.DataBindingUtil
 import androidx.fragment.app.Fragment
+import androidx.fragment.app.activityViewModels
 import androidx.lifecycle.ViewModelProviders
 import androidx.navigation.fragment.findNavController
 import androidx.recyclerview.widget.GridLayoutManager
@@ -19,7 +20,7 @@ import dagger.hilt.android.AndroidEntryPoint
 @AndroidEntryPoint
 class SearchFragment : Fragment(), TitleResultsAdapter.OnItemClickListener {
 
-    private lateinit var titlesViewModel: TitlesViewModel
+    private val titlesViewModel: TitlesViewModel by activityViewModels()
     private val adapter = TitleResultsAdapter(this)
     private lateinit var binding: FragmentSearchBinding
 
@@ -27,8 +28,6 @@ class SearchFragment : Fragment(), TitleResultsAdapter.OnItemClickListener {
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View {
-
-        titlesViewModel = ViewModelProviders.of(requireActivity()).get(TitlesViewModel::class.java)
 
         binding = DataBindingUtil.inflate(inflater, R.layout.fragment_search, container, false)
         binding.seachFab.setOnClickListener {

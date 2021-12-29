@@ -6,8 +6,7 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import androidx.databinding.DataBindingUtil
-import androidx.fragment.app.viewModels
-import androidx.lifecycle.ViewModelProviders
+import androidx.fragment.app.activityViewModels
 import com.rapiddeploy.mobile.cartracktechtask.R
 import com.rapiddeploy.mobile.cartracktechtask.databinding.FragmentTitleDetailsBinding
 import com.rapiddeploy.mobile.cartracktechtask.ui.viewmodel.TitlesViewModel
@@ -18,14 +17,13 @@ import dagger.hilt.android.AndroidEntryPoint
 class TitleDetailsFragment : Fragment() {
 
     lateinit var binding: FragmentTitleDetailsBinding
-    private lateinit var titlesViewModel: TitlesViewModel
+    private val titlesViewModel: TitlesViewModel by activityViewModels()
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View {
         binding = DataBindingUtil.inflate(inflater, R.layout.fragment_title_details, container, false)
-        titlesViewModel = ViewModelProviders.of(requireActivity()).get(TitlesViewModel::class.java)
         setMovieDetails()
 
         return binding.root
