@@ -60,7 +60,7 @@ class SearchFragment : Fragment(), TitleResultsAdapter.OnItemClickListener {
     private fun updateVisibility(it: UiState) {
         setProgressVisibility(it)
         setTitlesListVisibility(it)
-        setNoTitlesListVisibility(it)
+        setNoTitlesVisibility(it)
     }
 
     private fun updateTitles(it: List<Title>?) {
@@ -80,7 +80,7 @@ class SearchFragment : Fragment(), TitleResultsAdapter.OnItemClickListener {
             if (state == NOT_LOADING_WITH_TITLES) View.VISIBLE else View.GONE
     }
 
-    private fun setNoTitlesListVisibility(state: UiState) {
+    private fun setNoTitlesVisibility(state: UiState) {
         binding.noTitlesFound.visibility =
             if (state == NOT_LOADING_WITHOUT_TITLES) View.VISIBLE else View.GONE
     }
