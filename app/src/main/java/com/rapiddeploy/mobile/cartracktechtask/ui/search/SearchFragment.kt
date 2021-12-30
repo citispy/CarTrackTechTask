@@ -32,13 +32,17 @@ class SearchFragment : Fragment(), TitleResultsAdapter.OnItemClickListener {
 
         binding = DataBindingUtil.inflate(inflater, R.layout.fragment_search, container, false)
         binding.searchFab.setOnClickListener {
-            SearchDialogFragment().show(childFragmentManager, "tag")
+            openSearchDialog()
         }
 
         initTitlesList()
         observeViewModel()
 
         return binding.root
+    }
+
+    private fun openSearchDialog() {
+        SearchDialogFragment().show(childFragmentManager, "tag")
     }
 
     private fun initTitlesList() {
@@ -67,7 +71,10 @@ class SearchFragment : Fragment(), TitleResultsAdapter.OnItemClickListener {
         val moviesFound = it != null
         if (moviesFound) {
             adapter.updateTitles(it!!)
+        } else if (titlesViewModel.firstLoad) {
+            openSearchDialog()
         }
+        titlesViewModel.firstLoad = false
     }
 
     private fun setProgressVisibility(state: UiState) {

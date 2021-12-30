@@ -13,6 +13,7 @@ class TitlesViewModel @Inject constructor(private val repository: TitlesReposito
     private val isLoading = repository.isLoading
     val titles = repository.titles
     val uiState = MediatorLiveData<UiState>()
+    var firstLoad = true
 
     var selectedTitle: Title? = null
 
