@@ -35,6 +35,7 @@ class TitleResultsAdapter(private val itemCLickListener: OnItemClickListener):
             //Set poster
             Picasso.get()
                 .load(title.poster)
+                .fit()
                 .into(holder.poster)
 
             //Set title
