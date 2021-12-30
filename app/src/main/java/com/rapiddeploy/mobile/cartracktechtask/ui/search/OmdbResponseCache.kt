@@ -9,7 +9,7 @@ import javax.inject.Inject
 
 class OmdbResponseCache @Inject constructor(private val sharedPrefsUtils: SharedPrefsUtils) {
 
-    var response = MutableLiveData<OmdbResponse>()
+    var response = MutableLiveData<OmdbResponse?>()
 
     fun cacheResponse(response: OmdbResponse?) {
         val gson = Gson()
@@ -23,6 +23,8 @@ class OmdbResponseCache @Inject constructor(private val sharedPrefsUtils: Shared
         val cachedResponse = gson.fromJson(titlesString, OmdbResponse::class.java)
         if (cachedResponse != null) {
             response.value = cachedResponse
+        } else {
+            response.value = null
         }
     }
 

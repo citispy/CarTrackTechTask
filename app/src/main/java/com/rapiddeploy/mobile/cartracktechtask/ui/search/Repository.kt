@@ -11,7 +11,7 @@ class Repository(private val webRequestManager: WebRequestManager, private val o
 
     override val isLoading: MutableLiveData<Boolean> = webRequestManager.isLoading
     override val apiResponse: MutableLiveData<OmdbResponse?> = webRequestManager.omdbResponse
-    override val cachedApiResponse: MutableLiveData<OmdbResponse> = omdbResponseCache.response
+    override val cachedApiResponse: MutableLiveData<OmdbResponse?> = omdbResponseCache.response
     override val titles = MediatorLiveData<List<Title>>()
 
     override fun getTitles(searchTitle: String, type: Title.Type) {
@@ -26,7 +26,7 @@ class Repository(private val webRequestManager: WebRequestManager, private val o
         }
 
         titles.addSource(cachedApiResponse) {
-            titles.value = it.titles
+            titles.value = it?.titles
             Log.d("Repository", "titles set from cache")
         }
     }
