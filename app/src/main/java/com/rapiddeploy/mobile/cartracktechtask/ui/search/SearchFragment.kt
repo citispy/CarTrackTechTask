@@ -31,7 +31,7 @@ class SearchFragment : Fragment(), TitleResultsAdapter.OnItemClickListener {
     ): View {
 
         binding = DataBindingUtil.inflate(inflater, R.layout.fragment_search, container, false)
-        binding.seachFab.setOnClickListener {
+        binding.searchFab.setOnClickListener {
             SearchDialogFragment().show(childFragmentManager, "tag")
         }
 
