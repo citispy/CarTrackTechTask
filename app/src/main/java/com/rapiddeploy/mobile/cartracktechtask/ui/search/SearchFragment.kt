@@ -4,10 +4,15 @@ import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.widget.Toast
+import androidx.core.content.res.ResourcesCompat
 import androidx.databinding.DataBindingUtil
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.activityViewModels
+import androidx.fragment.app.viewModels
+import androidx.lifecycle.lifecycleScope
 import androidx.navigation.fragment.findNavController
+import androidx.recyclerview.widget.DividerItemDecoration
 import androidx.recyclerview.widget.GridLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.rapiddeploy.mobile.cartracktechtask.R
@@ -16,12 +21,15 @@ import com.rapiddeploy.mobile.cartracktechtask.databinding.FragmentSearchBinding
 import com.rapiddeploy.mobile.cartracktechtask.ui.viewmodel.TitlesViewModel
 import com.rapiddeploy.mobile.cartracktechtask.ui.viewmodel.TitlesViewModel.*
 import com.rapiddeploy.mobile.cartracktechtask.ui.viewmodel.TitlesViewModel.UiState.*
+import com.rapiddeploy.mobile.cartracktechtask.utils.NetworkStateViewModel
 import dagger.hilt.android.AndroidEntryPoint
+import kotlinx.coroutines.launch
 
 @AndroidEntryPoint
 class SearchFragment : Fragment(), TitleResultsAdapter.OnItemClickListener {
 
     private val titlesViewModel: TitlesViewModel by activityViewModels()
+    private val networkStateViewModel: NetworkStateViewModel by viewModels()
     private val adapter = TitleResultsAdapter(this)
     private lateinit var binding: FragmentSearchBinding
 
@@ -36,7 +44,7 @@ class SearchFragment : Fragment(), TitleResultsAdapter.OnItemClickListener {
         }
 
         initTitlesList()
-        observeViewModel()
+        observeViewModels()
 
         return binding.root
     }
@@ -48,48 +56,67 @@ class SearchFragment : Fragment(), TitleResultsAdapter.OnItemClickListener {
     private fun initTitlesList() {
         val titlesList: RecyclerView = binding.titlesList
         titlesList.layoutManager = GridLayoutManager(requireContext(), 2)
+
+        val dividerItemDecoration = getDividerItemDecoration(titlesList, RecyclerView.VERTICAL)
+        val dividerItemDecoration2 = getDividerItemDecoration(titlesList, RecyclerView.HORIZONTAL)
+
+        titlesList.addItemDecoration(dividerItemDecoration)
+        titlesList.addItemDecoration(dividerItemDecoration2)
+
         titlesList.adapter = adapter
     }
 
-    private fun observeViewModel() {
+    private fun getDividerItemDecoration(titlesList: RecyclerView, orientation: Int): DividerItemDecoration {
+        val dividerItemDecoration = DividerItemDecoration(titlesList.context, orientation)
+        ResourcesCompat.getDrawable(resources, R.drawable.divider, null)?.let { drawable -> dividerItemDecoration.setDrawable(drawable) }
+        return dividerItemDecoration
+    }
+
+    private fun observeViewModels() {
         titlesViewModel.uiState.observe(this) {
             updateVisibility(it)
         }
 
-        titlesViewModel.titles.observe(this) {
-            updateTitles(it)
+        titlesViewModel.getTitles("Good", Title.Type.MOVIE).observe(this) {
+            lifecycleScope.launch {
+                adapter.submitData(it)
+            }
+        }
+
+        titlesViewModel.errorMessage.observe(this) {
+            if (it != null) {
+                Toast.makeText(requireContext(), it, Toast.LENGTH_LONG).show()
+            }
+        }
+
+        networkStateViewModel.isOnline.observe(this) {
+            if (it) {
+                binding.searchFab.show()
+            } else {
+                binding.searchFab.hide()
+            }
         }
     }
 
-    private fun updateVisibility(it: UiState) {
-        setProgressVisibility(it)
-        setTitlesListVisibility(it)
-        setNoTitlesVisibility(it)
+    private fun updateVisibility(state: UiState) {
+        binding.progress.visibility =
+            if (state == LOADING) View.VISIBLE else View.GONE
+
+        binding.titlesList.visibility =
+            if (state == NOT_LOADING_WITH_TITLES) View.VISIBLE else View.GONE
+
+        binding.noTitlesFound.visibility =
+            if (state == NOT_LOADING_WITHOUT_TITLES) View.VISIBLE else View.GONE
     }
 
     private fun updateTitles(it: List<Title>?) {
         val moviesFound = it != null
         if (moviesFound) {
-            adapter.updateTitles(it!!)
+            //adapter.updateTitles(it!!)
         } else if (titlesViewModel.firstLoad) {
             openSearchDialog()
         }
         titlesViewModel.firstLoad = false
-    }
-
-    private fun setProgressVisibility(state: UiState) {
-        binding.progress.visibility =
-            if (state == LOADING) View.VISIBLE else View.GONE
-    }
-
-    private fun setTitlesListVisibility(state: UiState) {
-        binding.titlesList.visibility =
-            if (state == NOT_LOADING_WITH_TITLES) View.VISIBLE else View.GONE
-    }
-
-    private fun setNoTitlesVisibility(state: UiState) {
-        binding.noTitlesFound.visibility =
-            if (state == NOT_LOADING_WITHOUT_TITLES) View.VISIBLE else View.GONE
     }
 
     override fun onItemClicked(title: Title) {

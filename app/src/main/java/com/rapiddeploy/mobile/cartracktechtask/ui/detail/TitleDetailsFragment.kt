@@ -34,6 +34,7 @@ class TitleDetailsFragment : Fragment() {
 
         Picasso.get()
             .load(title.poster)
+            .placeholder(R.drawable.ic_baseline_broken_image)
             .into(binding.poster)
 
         binding.title.text = title.title
